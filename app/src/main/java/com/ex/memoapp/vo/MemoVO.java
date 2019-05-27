@@ -1,12 +1,16 @@
 package com.ex.memoapp.vo;
 
-public class MemoVO {
+import java.io.Serializable;
+
+public class MemoVO implements Serializable {
     private int id;
     private String title;
     private String content;
     private String date;
 
-    public MemoVO(){}
+    public MemoVO(){
+        id = 0;
+    }
 
     public MemoVO(int id, String title, String content, String date) {
         this.id = id;
