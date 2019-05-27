@@ -47,6 +47,7 @@ public class MemoDAO {
         ContentValues values = new ContentValues();
         values.put(MemoContract.MemoEntry.COLUMN_NAME_TITLE, memoVO.getTitle());
         values.put(MemoContract.MemoEntry.COLUMN_NAME_CONTENT, memoVO.getContent());
+        values.put(MemoContract.MemoEntry.COLUMN_NAME_DATE,memoVO.getDate());
         newRowId = dbCon.insert(MemoContract.MemoEntry.TABLE_NAME, null, values);
         return newRowId;
     }
@@ -56,18 +57,12 @@ public class MemoDAO {
         ContentValues values = new ContentValues();
         values.put(MemoContract.MemoEntry.COLUMN_NAME_TITLE, memoVO.getTitle());
         values.put(MemoContract.MemoEntry.COLUMN_NAME_CONTENT, memoVO.getContent());
-        values.put(MemoContract.MemoEntry.COLUMN_NAME_DATE, getTodayDate());
+        values.put(MemoContract.MemoEntry.COLUMN_NAME_DATE, memoVO.getDate());
 
         String selection = MemoContract.MemoEntry.COLUMN_NAME_ID + "=?";
         String[] selectionArgs = {String.valueOf(memoVO.getId())};
 
         return dbCon.update(MemoContract.MemoEntry.TABLE_NAME, values, selection, selectionArgs) > 0;
-    }
-
-    private String getTodayDate() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = new Date();
-        return dateFormat.format(date);
     }
 
     public boolean delete(long id) {

@@ -12,6 +12,9 @@ import android.widget.Toast;
 import com.ex.memoapp.db.MemoDAO;
 import com.ex.memoapp.vo.MemoVO;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class ContentActivity extends AppCompatActivity implements View.OnClickListener {
     private EditText et_title;
     private EditText et_content;
@@ -65,15 +68,14 @@ public class ContentActivity extends AppCompatActivity implements View.OnClickLi
                     Toast.makeText(this, getString(R.string.toastMsg_title_required),Toast.LENGTH_SHORT).show();
                     return;
                 }
+                memo.setTitle(et_title.getText().toString());
+                memo.setContent(et_content.getText().toString());
+                memo.setDate(getCurrentDateTime());
                 if(requestCode == CallbackCodes.REQUESTCODE_ADD_MEMO) {
-                    memo.setTitle(et_title.getText().toString());
-                    memo.setContent(et_content.getText().toString());
                     long rowId = dao.insert(memo);
                     memo.setId(rowId);
                     resultCode = CallbackCodes.RESULTCODE_ADD_MEMO;
                 } else {
-                    memo.setTitle(et_title.getText().toString());
-                    memo.setContent(et_content.getText().toString());
                     dao.update(memo);
                     resultCode = CallbackCodes.RESULTCODE_UPDATE_MEMO;
                 }
@@ -90,5 +92,11 @@ public class ContentActivity extends AppCompatActivity implements View.OnClickLi
         Intent intent = new Intent();
         setResult(resultCode, intent);
         finish();
+    }
+
+    private String getCurrentDateTime() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+        return dateFormat.format(date);
     }
 }

@@ -13,9 +13,9 @@ public class MemoDBHelper extends SQLiteOpenHelper {
     private static final String SQL_CREATE_TABLE =
             "CREATE TABLE " + MemoContract.MemoEntry.TABLE_NAME + "("
             + MemoContract.MemoEntry.COLUMN_NAME_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-            + MemoContract.MemoEntry.COLUMN_NAME_TITLE + " TEXT,"
+            + MemoContract.MemoEntry.COLUMN_NAME_TITLE + " TEXT NOT NULL,"
             + MemoContract.MemoEntry.COLUMN_NAME_CONTENT + " TEXT,"
-            + MemoContract.MemoEntry.COLUMN_NAME_DATE + " DATE DEFAULT CURRENT_DATE)";
+            + MemoContract.MemoEntry.COLUMN_NAME_DATE + " DATETIME DEFAULT (datetime('NOW','localtime')))";
     // sql - drop table
     private static final String SQL_DELETE_TABLE =
             "DROP TABLE IF EXISTS " + MemoContract.MemoEntry.TABLE_NAME;

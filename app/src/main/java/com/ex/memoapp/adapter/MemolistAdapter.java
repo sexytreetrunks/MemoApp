@@ -57,8 +57,10 @@ public class MemolistAdapter extends RecyclerView.Adapter<MemolistAdapter.MemoVi
             notifyItemInserted(pos);
         } else if(resultCode == CallbackCodes.RESULTCODE_UPDATE_MEMO) {
             MemoVO memo = (MemoVO) data.getSerializableExtra("result_data");
-            memoData.set(pos, memo);
-            notifyItemChanged(pos);
+            memoData.remove(pos);
+            notifyItemRemoved(pos);
+            memoData.add(0, memo);
+            notifyItemInserted(0);
         } else if(resultCode == CallbackCodes.RESULTCODE_DELETE_MEMO) {
             memoData.remove(pos);
             notifyItemRemoved(pos);
