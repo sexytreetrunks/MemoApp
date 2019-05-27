@@ -16,6 +16,9 @@ import com.ex.memoapp.ContentActivity;
 import com.ex.memoapp.R;
 import com.ex.memoapp.vo.MemoVO;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class MemolistAdapter extends RecyclerView.Adapter<MemolistAdapter.MemoViewHolder> {
@@ -40,7 +43,35 @@ public class MemolistAdapter extends RecyclerView.Adapter<MemolistAdapter.MemoVi
     public void onBindViewHolder(@NonNull MemoViewHolder memoViewHolder, int i) {
         memoViewHolder.tv_item_title.setText(memoData.get(i).getTitle());
         memoViewHolder.tv_item_content.setText(memoData.get(i).getContent());
-        memoViewHolder.tv_item_date.setText(memoData.get(i).getDate());
+        String formatedDate = formatDatetime(memoData.get(i).getDate());
+        memoViewHolder.tv_item_date.setText(formatedDate);
+    }
+
+    private String formatDatetime(String rowdatetime) {
+        final int mm = 60;
+        final int hh = mm * 60;
+        final int dd = hh * 24;
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String formatedDatetime = "";
+        Date dbdate = new Date();
+        try {
+            dbdate = format.parse(rowdatetime);
+        }catch (ParseException pex) {
+            Log.d("adapter err","db에 저장된 date형식이 잘못됨");
+        }
+        Date curdate = new Date();
+        long diff = curdate.getTime() - dbdate.getTime();
+        long sec = diff/1000;
+        if(sec < mm) {
+            formatedDatetime = sec + "초 전";
+        } else if(sec >= mm && sec < hh) {
+            formatedDatetime = sec/mm + "분 전";
+        } else if(sec >= hh && sec < dd) {
+            formatedDatetime = sec/hh + "시간 전";
+        } else {
+            formatedDatetime = new SimpleDateFormat("yyyy-MM-dd").format(dbdate);
+        }
+        return formatedDatetime;
     }
 
     @Override
