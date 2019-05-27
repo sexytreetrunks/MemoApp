@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">MemoApp</string>
+    <string name="toastMsg_title_required">제목을 입력하세여</string>
+    <string name="toastMsg_added_memo">메모가 등록되었슴다</string>
+    <string name="toastMsg_updated_memo">메모가 변경되었슴다</string>
+    <string name="toastMsg_deleted_memo">메모가 삭제되었슴다</string>
+    <string name="toastMsg_cannot_delete_memo">메모를 삭제할수없슴니다</string>
 </resources>

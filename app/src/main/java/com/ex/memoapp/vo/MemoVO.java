@@ -3,7 +3,7 @@ package com.ex.memoapp.vo;
 import java.io.Serializable;
 
 public class MemoVO implements Serializable {
-    private int id;
+    private long id;
     private String title;
     private String content;
     private String date;
@@ -12,18 +12,24 @@ public class MemoVO implements Serializable {
         id = 0;
     }
 
-    public MemoVO(int id, String title, String content, String date) {
+    public MemoVO(String title, String content, String date) {
+        this.title = title;
+        this.content = content;
+        this.date = date;
+    }
+
+    public MemoVO(long id, String title, String content, String date) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.date = date;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

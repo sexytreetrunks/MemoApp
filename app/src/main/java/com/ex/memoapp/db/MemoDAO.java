@@ -70,7 +70,7 @@ public class MemoDAO {
         return dateFormat.format(date);
     }
 
-    public boolean delete(int id) {
+    public boolean delete(long id) {
         dbCon = getWritableConnection();
         ContentValues values = new ContentValues();
         String selection = MemoContract.MemoEntry.COLUMN_NAME_ID + "=?";

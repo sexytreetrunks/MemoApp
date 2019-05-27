@@ -3,9 +3,11 @@ package com.ex.memoapp;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.ex.memoapp.db.MemoDAO;
 import com.ex.memoapp.vo.MemoVO;
@@ -18,6 +20,8 @@ public class ContentActivity extends AppCompatActivity implements View.OnClickLi
 
     private MemoDAO dao;
     private MemoVO memo;
+    private int requestCode;
+    private int pos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +35,8 @@ public class ContentActivity extends AppCompatActivity implements View.OnClickLi
         btn_remove.setOnClickListener(this);
 
         Intent intent = getIntent();
+        requestCode = intent.getIntExtra("requestCode",CallbackCodes.REQUESTCODE_ADD_MEMO);
+        pos = intent.getIntExtra("pos",0);
         memo = (MemoVO) intent.getSerializableExtra("memoitem");
         et_title.setText(memo.getTitle());
         et_content.setText(memo.getContent());
@@ -38,29 +44,42 @@ public class ContentActivity extends AppCompatActivity implements View.OnClickLi
         dao = new MemoDAO(getApplicationContext());
     }
 
-    //TODO: request값에 따라서 dao로 db작업
     @Override
     public void onClick(View v) {
         Button btn = (Button) v;
         Intent intent = new Intent();
-        int resultCode = 0;
+        int resultCode = CallbackCodes.RESULTCODE_NOOP;
         switch (btn.getId()) {
             case R.id.btn_remove:
-                if(memo.getId()==0){
-                    resultCode = CallbackCodes.RESULTCODE_NOOP;
+                if(requestCode == CallbackCodes.REQUESTCODE_ADD_MEMO){
+                    Toast.makeText(this, getString(R.string.toastMsg_cannot_delete_memo), Toast.LENGTH_SHORT).show();
+                    return;
                 } else {
+                    dao.delete(memo.getId());
                     resultCode = CallbackCodes.RESULTCODE_DELETE_MEMO;
                 }
                 break;
             case R.id.btn_save:
-                if(memo.getId() == 0) {
+                if(et_title.getText().toString().equals("")) {
+                    Toast.makeText(this, getString(R.string.toastMsg_title_required),Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(requestCode == CallbackCodes.REQUESTCODE_ADD_MEMO) {
+                    memo.setTitle(et_title.getText().toString());
+                    memo.setContent(et_content.getText().toString());
+                    long rowId = dao.insert(memo);
+                    memo.setId(rowId);
                     resultCode = CallbackCodes.RESULTCODE_ADD_MEMO;
                 } else {
+                    memo.setTitle(et_title.getText().toString());
+                    memo.setContent(et_content.getText().toString());
+                    dao.update(memo);
                     resultCode = CallbackCodes.RESULTCODE_UPDATE_MEMO;
                 }
+                intent.putExtra("result_data", memo);
                 break;
         }
-        // remove, save의 경우 수정된 리스트가 recyclerview에 반영되어야함
+        intent.putExtra("pos",pos);
         setResult(resultCode, intent);
         finish();
     }

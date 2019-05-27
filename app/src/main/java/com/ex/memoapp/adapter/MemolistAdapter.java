@@ -51,6 +51,20 @@ public class MemolistAdapter extends RecyclerView.Adapter<MemolistAdapter.MemoVi
     //TODO: activityresult값을 토대로 adapter에서 recylerview 내용을 갱신해야함
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d("adapter result","request: "+requestCode+", result: "+resultCode);
+        int pos = data.getIntExtra("pos",0);
+        if(resultCode == CallbackCodes.RESULTCODE_ADD_MEMO) {
+            MemoVO memo = (MemoVO) data.getSerializableExtra("result_data");
+            memoData.add(pos,memo);
+            notifyItemInserted(pos);
+        } else if(resultCode == CallbackCodes.RESULTCODE_UPDATE_MEMO) {
+            MemoVO memo = (MemoVO) data.getSerializableExtra("result_data");
+            memoData.set(pos, memo);
+            notifyItemChanged(pos);
+        } else if(resultCode == CallbackCodes.RESULTCODE_DELETE_MEMO) {
+            memoData.remove(pos);
+            notifyItemRemoved(pos);
+            notifyItemRangeChanged(pos, memoData.size());
+        }
     }
 
     public class MemoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -70,6 +84,8 @@ public class MemolistAdapter extends RecyclerView.Adapter<MemolistAdapter.MemoVi
         public void onClick(View v) {
             int pos = getAdapterPosition();
             Intent intent = new Intent(v.getContext(),ContentActivity.class);
+            intent.putExtra("requestCode",CallbackCodes.REQUESTCODE_UPDATE_MEMO);
+            intent.putExtra("pos",pos);
             intent.putExtra("memoitem",memoData.get(pos));
             ((Activity)context).startActivityForResult(intent, CallbackCodes.REQUESTCODE_UPDATE_MEMO);
         }
