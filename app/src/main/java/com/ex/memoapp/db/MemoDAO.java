@@ -13,13 +13,21 @@ import java.util.List;
 import com.ex.memoapp.vo.MemoVO;
 
 public class MemoDAO {
+    private static MemoDAO daoInstance;
     private Context context;
     private MemoDBHelper dbHelper;
     private SQLiteDatabase dbCon;
 
-    public MemoDAO(Context context) {
+    private MemoDAO(Context context) {
         this.context = context;
         dbHelper = new MemoDBHelper(this.context);
+    }
+
+    public static MemoDAO getInstance(Context context) {
+        if(daoInstance == null) {
+            daoInstance = new MemoDAO(context);
+        }
+        return daoInstance;
     }
 
     private SQLiteDatabase getReadableConnection() {

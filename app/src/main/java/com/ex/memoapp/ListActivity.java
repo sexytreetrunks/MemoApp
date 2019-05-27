@@ -23,8 +23,6 @@ public class ListActivity extends AppCompatActivity {
     private MemolistAdapter memolist_Adapter;
     private RecyclerView.LayoutManager memolist_layoutManager;
 
-    private MemoDAO dao;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,8 +33,7 @@ public class ListActivity extends AppCompatActivity {
         memolist_layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView_memolist.setLayoutManager(memolist_layoutManager);
 
-        dao = new MemoDAO(getApplicationContext());
-        List<MemoVO> memoDataset = dao.getAll();
+        List<MemoVO> memoDataset = MemoDAO.getInstance(getApplicationContext()).getAll();
 
         // ApplicationContext != Activity Context임! activity context는 this로 사용하면됨ㅇㅇ
         memolist_Adapter = new MemolistAdapter(memoDataset, this);

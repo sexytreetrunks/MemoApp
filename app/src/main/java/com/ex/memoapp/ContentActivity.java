@@ -21,7 +21,6 @@ public class ContentActivity extends AppCompatActivity implements View.OnClickLi
     private Button btn_save;
     private Button btn_remove;
 
-    private MemoDAO dao;
     private MemoVO memo;
     private int requestCode;
     private int pos;
@@ -46,7 +45,6 @@ public class ContentActivity extends AppCompatActivity implements View.OnClickLi
         et_title.setText(memo.getTitle());
         et_content.setText(memo.getContent());
 
-        dao = new MemoDAO(getApplicationContext());
     }
 
     @Override
@@ -59,7 +57,8 @@ public class ContentActivity extends AppCompatActivity implements View.OnClickLi
                     Toast.makeText(this, getString(R.string.toastMsg_cannot_delete_memo), Toast.LENGTH_SHORT).show();
                     return;
                 } else {
-                    dao.delete(memo.getId());
+                    MemoDAO.getInstance(getApplicationContext())
+                            .delete(memo.getId());
                     resultCode = CallbackCodes.RESULTCODE_DELETE_MEMO;
                 }
                 break;
@@ -72,11 +71,13 @@ public class ContentActivity extends AppCompatActivity implements View.OnClickLi
                 memo.setContent(et_content.getText().toString());
                 memo.setDate(getCurrentDateTime());
                 if(requestCode == CallbackCodes.REQUESTCODE_ADD_MEMO) {
-                    long rowId = dao.insert(memo);
+                    long rowId = MemoDAO.getInstance(getApplicationContext())
+                                        .insert(memo);
                     memo.setId(rowId);
                     resultCode = CallbackCodes.RESULTCODE_ADD_MEMO;
                 } else {
-                    dao.update(memo);
+                    MemoDAO.getInstance(getApplicationContext())
+                            .update(memo);
                     resultCode = CallbackCodes.RESULTCODE_UPDATE_MEMO;
                 }
                 intent.putExtra("result_data", memo);
