@@ -22,6 +22,7 @@ public class ContentActivity extends AppCompatActivity implements View.OnClickLi
     private MemoVO memo;
     private int requestCode;
     private int pos;
+    private int resultCode;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +35,7 @@ public class ContentActivity extends AppCompatActivity implements View.OnClickLi
         btn_save.setOnClickListener(this);
         btn_remove.setOnClickListener(this);
 
+        resultCode = CallbackCodes.RESULTCODE_NOOP;
         Intent intent = getIntent();
         requestCode = intent.getIntExtra("requestCode",CallbackCodes.REQUESTCODE_ADD_MEMO);
         pos = intent.getIntExtra("pos",0);
@@ -48,7 +50,6 @@ public class ContentActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View v) {
         Button btn = (Button) v;
         Intent intent = new Intent();
-        int resultCode = CallbackCodes.RESULTCODE_NOOP;
         switch (btn.getId()) {
             case R.id.btn_remove:
                 if(requestCode == CallbackCodes.REQUESTCODE_ADD_MEMO){
@@ -80,6 +81,13 @@ public class ContentActivity extends AppCompatActivity implements View.OnClickLi
                 break;
         }
         intent.putExtra("pos",pos);
+        setResult(resultCode, intent);
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
         setResult(resultCode, intent);
         finish();
     }

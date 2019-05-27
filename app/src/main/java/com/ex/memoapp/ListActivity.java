@@ -63,6 +63,8 @@ public class ListActivity extends AppCompatActivity {
         else if(resultCode == CallbackCodes.RESULTCODE_DELETE_MEMO)
             toastMsg = getString(R.string.toastMsg_deleted_memo);
         Toast.makeText(this, toastMsg, Toast.LENGTH_SHORT).show();
+        if(resultCode == CallbackCodes.RESULTCODE_NOOP)
+            return;
         memolist_Adapter.onActivityResult(requestCode, resultCode, data);
     }
 }

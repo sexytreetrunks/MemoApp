@@ -48,7 +48,6 @@ public class MemolistAdapter extends RecyclerView.Adapter<MemolistAdapter.MemoVi
         return memoData.size();
     }
 
-    //TODO: activityresult값을 토대로 adapter에서 recylerview 내용을 갱신해야함
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d("adapter result","request: "+requestCode+", result: "+resultCode);
         int pos = data.getIntExtra("pos",0);
