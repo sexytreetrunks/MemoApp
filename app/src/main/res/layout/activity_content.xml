@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
-            android:text="메모제목"
+            android:hint="@string/toastMsg_title_required"
             android:textSize="36sp" />
 
         <EditText
@@ -33,7 +33,7 @@
             android:gravity="start|top"
             android:inputType="textMultiLine"
             android:lineSpacingMultiplier="2"
-            android:text="메모 내용" />
+            android:hint="@string/content_required"/>
     </LinearLayout>
 
     <LinearLayout
